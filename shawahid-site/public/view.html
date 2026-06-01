@@ -7673,14 +7673,33 @@ var _vp=new URLSearchParams(window.location.search);
 var _tn=(_vp.get('teacher')||'المعلم').trim();
 var _ph=(_vp.get('phone')||'').trim();
 function downloadPDF(){
-  var p=new URLSearchParams(window.location.search);
-  applyData({teacher:p.get('teacher')||'',subject:p.get('subject')||'',school:p.get('school')||'',manager:p.get('manager')||'',admin:p.get('admin')||'',gender:p.get('gender')||'male'});
-  setTimeout(function(){
-    var o=document.title;
-    document.title='ملف-إنجاز-'+_tn.replace(/\s+/g,'-');
-    window.print();
-    setTimeout(function(){document.title=o;},2000);
-  },800);
+  var btn=document.getElementById('dl-btn');
+  var orig=btn.innerHTML;
+  var qs=window.location.search||'';
+  btn.innerHTML='⏳ جارٍ تحضير الملف… (قد يأخذ ٥-١٠ ثوانٍ)';
+  btn.style.pointerEvents='none';
+  btn.style.opacity='0.85';
+  function restore(){ btn.innerHTML=orig; btn.style.pointerEvents=''; btn.style.opacity=''; }
+  // نطلب PDF نظيفاً من الخادم (موحّد على الآيفون والأندرويد والكمبيوتر)
+  fetch('/api/generate-pdf'+qs)
+    .then(function(r){ if(!r.ok) throw new Error('api'); return r.blob(); })
+    .then(function(blob){
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url;
+      a.download='ملف-إنجاز-'+_tn.replace(/\s+/g,'-')+'.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); },4000);
+      restore();
+    })
+    .catch(function(){
+      // احتياطي: إن لم يتوفّر الخادم (استضافة بدون API) نستخدم طباعة المتصفح
+      restore();
+      var o=document.title;
+      document.title='ملف-إنجاز-'+_tn.replace(/\s+/g,'-');
+      window.print();
+      setTimeout(function(){document.title=o;},2000);
+    });
 }
 function openWhatsApp(e){
   if(e)e.preventDefault();

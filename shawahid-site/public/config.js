@@ -12,5 +12,5 @@ window.SHAWAHID_CONFIG = {
   // webhook لجمع بيانات العملاء (اختياري)
   // مثال: Google Sheets via Apps Script أو Web3Forms أو Zapier
   // اتركه فارغاً '' إذا لا تريد استخدامه (البيانات تُحفظ في localStorage فقط)
-  LEADS_WEBHOOK: 'https://script.google.com/macros/s/AKfycbwgWHlXwgeWbYnG_NN2eLuBXbAY8TmFnDZUxzefr1UUFxRX5L_s56kvdN6_4_pLYns02g/exec',
+  LEADS_WEBHOOK: 'https://script.google.com/macros/s/AKfycbwQOvP02IA6hgLWceYYMCCOZFtEmhdtE9GK8w-QO9kDKqQBGzCJukihtgtamtAinbv7/exec',
 };

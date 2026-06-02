@@ -879,10 +879,16 @@ function downloadFreePreview() {
     alert('الرجاء تعبئة: اسم المعلم + المدرسة + المدير');
     return;
   }
-  
-  // تحقق من رقم الجوال - تساهل أكثر
-  if (phone && !/^0?5\d{8}$/.test(phone.replace(/\s+/g, ''))) {
+
+  // رقم الجوال إجباري
+  if (!phone) {
+    alert('الرجاء إدخال رقم الجوال');
+    $('f-phone').focus();
+    return;
+  }
+  if (!/^0?5\d{8}$/.test(phone.replace(/\s+/g, ''))) {
     alert('رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام');
+    $('f-phone').focus();
     return;
   }
   
